@@ -19,8 +19,7 @@ OrderService.prototype = function(){
 
     var EventBus = {
          eventTopics: {},
-         subscribe: function(eventName , listener){
-             console.log('this == ', this);
+         subscribe:function(eventName , listener){
              var evb = EventBus;
              if (!evb.eventTopics[eventName] || evb.eventTopics[eventName].length < 1 ){
                  evb.eventTopics[eventName] = [];
@@ -31,18 +30,16 @@ OrderService.prototype = function(){
              var evb = EventBus;
              var e = new Event(params);
              if (!evb.eventTopics[eventName] || evb.eventTopics[eventName].length < 1) return;
-             evb.eventTopics[eventName].forEach(function(listener) {
-                 listener(e);
-             });
+             evb.eventTopics[eventName].forEach((listener) => {  listener(e);  });
          }
 
      } //END EventBus
-     var addNewOrder = function(params){
+     var addNewOrder = (params) => {
          console.log("created the order using parameters given as " ,params);
          //publish/emit the event = order/new 
          EventBus.publish('order/new' , params);
      }
-     var deleteOrder = function(params){
+     var deleteOrder = (params)=>{
          console.log("Order deleted using the parameters given as ", params);
          EventBus.publish('order/remove',params);
      }
@@ -59,6 +56,10 @@ var orderSrc = new OrderService();
 
 orderSrc.on('order/new', (e) => { console.log('1st Event Notified for ',e.data.id); });
 orderSrc.on('order/remove', (e) => { console.log('2nd Event Notified for ',e.data.id); });
+
+orderSrc.createOrder({ "Email": "irshad@mfail.com", "name": "irshad", "id": "order0001" });
+orderSrc.createOrder({ "Email": "ahmad@mfail.com", "name": "ahmad", "id": "order0003" });
+
 orderSrc.removeOrder({ "Email": "irshad@mfail.com", "name": "irshad", "id": "order0001" });
 orderSrc.removeOrder({ "Email": "ahmad@mfail.com", "name": "ahmad", "id": "order0003" });
 
