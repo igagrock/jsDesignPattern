@@ -1,34 +1,22 @@
-var Publisher = function(params){
-    var params = params;
-    this.getParams = function(){return params};
-};
-Publisher.prototype = function(){
-    var _this =  this;
-    var EventBus = {
+var EventBus = function(){
+    eventTopics =  {};
+    //subscriber
+    this.addEventListener =  function (eventName, listener) {
+        if ( !eventTopics[eventName] || eventTopics[eventName].length < 1) {
+                eventTopics[eventName] = [];
+        }
+         eventTopics[eventName].push(listener);
+    };
+    //publisher
+    this.emitEventListeners = function (eventName , params) {
+        if ( !eventTopics[eventName] || eventTopics[eventName].length < 1) return;
 
-         eventTopics: {},
+          eventTopics[eventName].forEach(function (listener) {
+              
+            listener( !!params ? params : {} );
+        });
+    }
 
-         subscribe: function(eventName , listener){
-             if(!this.eventTopics[eventName] || this.eventTopics[eventName].length < 1 ){
-                 this.eventTopics[eventName] = [];
-             }
-             this.eventTopics[eventName].push(listener);
-         },
-         publish: function(eventName){
-             if (!this.eventTopics[eventName] || this.eventTopics[eventName].length < 1) return;
-             
-             this.eventTopics[eventName].forEach(function(listener) {
-                 listener(_this.getParams());
-             });
-         }
+} //END EventBus
 
-     } //END EventBus
-
-     return {
-         on : EventBus.subscribe,
-         publish : EventBus.publish
-     }
-
-}();
-
-var p1 = new Publisher({"Email": "irshad@mfail.com", "name": "irshad"});
+var OrderService = c
